@@ -1,0 +1,47 @@
+erDiagram
+    ESTUDIANTES {
+        int id PK
+        string codigo
+        string nombres
+        string apellidos
+        string email
+        string telefono
+        date fecha_nacimiento
+        timestamp created_at
+    }
+
+    DOCENTES {
+        int id PK
+        string nombres
+        string apellidos
+        string email
+        string profesion
+        timestamp created_at
+    }
+
+    MATERIAS {
+        int id PK
+        string nombre
+        string codigo
+        int creditos
+    }
+
+    CURSOS {
+        int id PK
+        string semestre
+        int cupos
+        int materia_id FK
+        int docente_id FK
+    }
+
+    INSCRIPCIONES {
+        int id PK
+        date fecha_inscripcion
+        int estudiante_id FK
+        int curso_id FK
+    }
+
+    MATERIAS ||--o{ CURSOS : "tiene"
+    DOCENTES ||--o{ CURSOS : "imparte"
+    ESTUDIANTES ||--o{ INSCRIPCIONES : "realiza"
+    CURSOS ||--o{ INSCRIPCIONES : "recibe"
