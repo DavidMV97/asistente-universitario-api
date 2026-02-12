@@ -1,25 +1,22 @@
 import express from 'express'
+import cors from 'cors'; 
 import logger from 'morgan'
 import dotenv from 'dotenv'
+import estudiantesRoutes from "./routes/estudiantes.routes.ts";
+
 
 dotenv.config(); 
 
 const port = process.env.PORT ?? 3000; 
+
 const app = express(); 
-app.use(logger('dev'))
+app.use(cors());
+app.use(logger('dev'));
+app.use(express.json());
 
-console.log(process.env.DB_DATABASE)
-
-app.get('/', (req, res) => {
-    res.send('<h1>Hola nodejs</h1>')
-})
+// routes
+app.use("/api/estudiantes", estudiantesRoutes);
 
 app.listen(port, () => {
     console.log('Server running on port', port);
 })
-
-/* Asistente universitario
-    - Estudiantes
-    - Docentes
-    - Materias
-*/ 
