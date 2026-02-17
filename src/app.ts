@@ -4,7 +4,6 @@ import logger from 'morgan'
 import dotenv from 'dotenv'
 import estudiantesRoutes from "./routes/estudiantes.routes.ts";
 
-
 dotenv.config(); 
 
 const port = process.env.PORT ?? 3000; 
@@ -15,7 +14,7 @@ app.use(logger('dev'));
 app.use(express.json());
 
 // routes
-app.use("/api/estudiantes", estudiantesRoutes);
+app.use("/api", estudiantesRoutes);
 
 app.listen(port, () => {
     console.log('Server running on port', port);
