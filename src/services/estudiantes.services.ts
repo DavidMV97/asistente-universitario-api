@@ -1,8 +1,15 @@
-import { findAll, findById, create as repoCreate, update as repoUpdate, remove as repoRemove } from "../repositories/estudiantes.repository.ts";
-import type { Estudiante, CreateEstudianteDTO, UpdateEstudianteDTO, ApiError } from "../types/estudiante.interface.ts";
+import { 
+  findAll as repoFindAll, 
+  findById as repoFindById, 
+  create as repoCreate, 
+  update as repoUpdate, 
+  remove as repoRemove 
+} from "../repositories/estudiantes.repository.ts";
+import type { ApiError } from "../models/Error.ts";
+import type { Estudiante, CreateEstudiante, UpdateEstudiante } from "../models/Estudiante.ts";
 
 export async function getAll(): Promise<Estudiante[]> {
-  return await findAll();
+  return await repoFindAll();
 }
 
 export async function getById(id: any): Promise<Estudiante> {
@@ -13,7 +20,7 @@ export async function getById(id: any): Promise<Estudiante> {
     throw err;
   }
 
-  const row = await findById(num);
+  const row = await repoFindById(num);
   if (!row) {
     const err = new Error('Estudiante no encontrado') as ApiError;
     err.status = 404;
@@ -22,7 +29,7 @@ export async function getById(id: any): Promise<Estudiante> {
   return row;
 }
 
-export async function create(data: CreateEstudianteDTO): Promise<number> {
+export async function create(data: CreateEstudiante): Promise<number> {
   // Validaciones mínimas
   if (!data.codigo || !data.nombres || !data.apellidos || !data.email) {
     const err = new Error('Faltan campos obligatorios') as ApiError;
@@ -33,7 +40,7 @@ export async function create(data: CreateEstudianteDTO): Promise<number> {
   return id;
 }
 
-export async function update(id: any, data: UpdateEstudianteDTO): Promise<number> {
+export async function update(id: any, data: UpdateEstudiante): Promise<number> {
   await getById(id); // valida que existe
   const affected = await repoUpdate(Number(id), data);
   return affected;

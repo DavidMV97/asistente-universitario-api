@@ -1,5 +1,6 @@
 import { pool } from "../db/mysql.ts";
-import type { Estudiante, CreateEstudianteDTO, UpdateEstudianteDTO, QueryResult } from "../types/estudiante.interface.ts";
+import type { Estudiante, CreateEstudiante, UpdateEstudiante } from "../models/Estudiante.ts";
+import type { QueryResult } from "../models/Query.ts";
 
 export const findAll = async (): Promise<Estudiante[]> => {
     const [rows] = await pool.query('SELECT * FROM estudiantes ORDER BY id DESC');
@@ -11,7 +12,7 @@ export const findById = async (id: number): Promise<Estudiante | null> => {
     return (rows as Estudiante[])[0] || null;
 }
 
-export const create = async (data: CreateEstudianteDTO): Promise<number> => {
+export const create = async (data: CreateEstudiante): Promise<number> => {
     const sql = `
         INSERT INTO estudiantes (codigo, nombres, apellidos, email, telefono, fecha_nacimiento)
         VALUES (?, ?, ?, ?, ?, ?)
@@ -28,7 +29,7 @@ export const create = async (data: CreateEstudianteDTO): Promise<number> => {
     return (result as QueryResult).insertId || 0;
 }
 
-export const update = async (id: number, data: UpdateEstudianteDTO): Promise<number> => {
+export const update = async (id: number, data: UpdateEstudiante): Promise<number> => {
     const sql = `
         UPDATE estudiantes
         SET codigo = ?, nombres = ?, apellidos = ?, email = ?, telefono = ?, fecha_nacimiento = ?

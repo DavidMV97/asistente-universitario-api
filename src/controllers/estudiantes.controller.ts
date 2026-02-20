@@ -20,7 +20,6 @@ export async function createEstudiante(req: Request, res: Response, next: NextFu
     const id = await service.create(req.body);
     res.status(201).json({ ok: true, id, message: 'Estudiante creado' });
   } catch (e) {
-    //res.status(400).json({ ok: false, message: 'Error al crear estudiante', error: (e as any).message });
     next(e);
   }
 }
