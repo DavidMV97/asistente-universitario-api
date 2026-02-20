@@ -1,15 +1,9 @@
-import { 
-  findAll as repoFindAll, 
-  findById as repoFindById, 
-  create as repoCreate, 
-  update as repoUpdate, 
-  remove as repoRemove 
-} from "../repositories/docentes.repository.ts";
+import * as repo from '../repositories/docentes.repository.ts';
 import type { ApiError } from "../models/Error.ts";
 import type { CreateDocente, Docente, UpdateDocente } from "../models/Docente.ts";
 
 export async function getAll(): Promise<Docente[]> {
-  return await repoFindAll();
+  return await repo.findAll();
 }
 
 export async function getById(id: any): Promise<Docente> {
@@ -20,7 +14,7 @@ export async function getById(id: any): Promise<Docente> {
     throw err;
   }
 
-  const row = await repoFindById(num);
+  const row = await repo.findById(num);
   if (!row) {
     const err = new Error('Docente no encontrado') as ApiError;
     err.status = 404;
@@ -36,18 +30,18 @@ export async function create(data: CreateDocente): Promise<number> {
     err.status = 400;
     throw err;
   }
-  const id = await repoCreate(data);
+  const id = await repo.create(data);
   return id;
 }
 
 export async function update(id: any, data: UpdateDocente): Promise<number> {
   await getById(id); // valida que existe
-  const affected = await repoUpdate(Number(id), data);
+  const affected = await repo.update(Number(id), data);
   return affected;
 }
 
 export async function remove(id: any): Promise<number> {
   await getById(id); // valida que existe
-  const affected = await repoRemove(Number(id));
+  const affected = await repo.remove(Number(id));
   return affected;
 }
