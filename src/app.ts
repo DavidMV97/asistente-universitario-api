@@ -7,6 +7,7 @@ import docentesRoutes from "./routes/docentes.routes.ts";
 import programasRoutes from "./routes/programas.routes.ts";
 import materiasRoutes from "./routes/materias.routes.ts";
 import cursosRoutes from "./routes/cursos.routes.ts";
+import inscripcionesRoutes from "./routes/inscripciones.routes.ts";
 
 dotenv.config(); 
 
@@ -23,6 +24,7 @@ app.use("/api", docentesRoutes);
 app.use("/api", programasRoutes);
 app.use("/api", materiasRoutes);
 app.use("/api", cursosRoutes);
+app.use("/api", inscripcionesRoutes);
 
 app.listen(port, () => {
     console.log('Server running on port', port);

@@ -32,8 +32,6 @@ export async function create(data: CreateCurso): Promise<number> {
     err.status = 400;
     throw err;
   }
-
-  console.log(data.materia_id);
   
 
   // Validar que la materia existe
