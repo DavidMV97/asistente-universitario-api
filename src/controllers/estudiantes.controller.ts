@@ -48,3 +48,10 @@ export async function deleteEstudiante(req: Request, res: Response, next: NextFu
     res.json({ ok: true, message: 'Estudiante eliminado' });
   } catch (e) { next(e); }
 }
+
+export async function softDeleteEstudiante(req: Request, res: Response, next: NextFunction) {
+  try {
+    const result = await service.softRemove(req.params.id) 
+    res.json({ ok: true, message: 'Estudiante eliminado' })
+  } catch (e) { next(e); }
+}

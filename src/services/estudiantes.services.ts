@@ -47,6 +47,18 @@ export async function remove(id: any): Promise<number> {
   return affected;
 }
 
+export async function softRemove(id: any): Promise<number> {
+  await getById(id);
+  const affected = await repo.softRemove(Number(id));
+  if (affected === 0) {
+    const err = new Error('El estudiante ya se encuentra eliminado') as ApiError;
+    err.status = 404;
+    throw err;
+  }
+
+  return affected;
+}
+
 export async function getCursos(estudianteId: any, enrolled = true) {
   // validar estudiante
   const estudiante = await getById(estudianteId);

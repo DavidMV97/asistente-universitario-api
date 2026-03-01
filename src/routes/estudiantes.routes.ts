@@ -6,6 +6,7 @@ import {
   updateEstudiante,
   deleteEstudiante,
   getCursosByEstudiante,
+  softDeleteEstudiante,
 } from "../controllers/estudiantes.controller.ts";
 import errorHandler from "../middlewares/errorHandler.ts";
 
@@ -17,5 +18,6 @@ router.get("/estudiante/:id/cursos", getCursosByEstudiante, errorHandler);
 router.post("/estudiantes", createEstudiante, errorHandler);
 router.put("/estudiante/:id", updateEstudiante, errorHandler);
 router.delete("/estudiante/:id", deleteEstudiante, errorHandler);
+router.patch("/estudiante/:id", softDeleteEstudiante, errorHandler);
 
 export default router;

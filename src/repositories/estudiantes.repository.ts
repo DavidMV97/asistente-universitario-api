@@ -3,7 +3,7 @@ import type { Estudiante, CreateEstudiante, UpdateEstudiante } from "../models/E
 import type { QueryResult } from "../models/Query.ts";
 
 export const findAll = async (): Promise<Estudiante[]> => {
-    const [rows] = await pool.query('SELECT * FROM estudiantes ORDER BY id DESC');
+    const [rows] = await pool.query('SELECT * FROM estudiantes WHERE deleted_at IS NULL ORDER BY id DESC');
     return rows as Estudiante[];
 }
 
@@ -51,6 +51,20 @@ export const update = async (id: number, data: UpdateEstudiante): Promise<number
 
 export const remove = async (id: number): Promise<number> => {
     const [result] = await pool.query('DELETE FROM estudiantes WHERE id= ?', [id]);
+    return (result as QueryResult).affectedRows;
+}
+
+export const softRemove = async(id:number): Promise<number> => {
+        const sql = `
+        UPDATE estudiantes
+        SET deleted_at = NOW()
+        WHERE id = ? AND deleted_at IS NULL
+    `;
+    const params = [
+        id
+    ];
+
+    const [result] = await pool.query(sql, params);
     return (result as QueryResult).affectedRows;
 }
 
