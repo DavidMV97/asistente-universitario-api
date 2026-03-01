@@ -1,6 +1,7 @@
 import * as repo from '../repositories/estudiantes.repository.ts';
 import type { ApiError } from "../models/Error.ts";
 import type { Estudiante, CreateEstudiante, UpdateEstudiante } from "../models/Estudiante.ts";
+import * as cursosRepo from '../repositories/cursos.repository.ts';
 
 export async function getAll(): Promise<Estudiante[]> {
   return await repo.findAll();
@@ -44,4 +45,15 @@ export async function remove(id: any): Promise<number> {
   await getById(id); // valida que existe
   const affected = await repo.remove(Number(id));
   return affected;
+}
+
+export async function getCursos(estudianteId: any, enrolled = true) {
+  // validar estudiante
+  const estudiante = await getById(estudianteId);
+
+  if (enrolled) {
+    return await cursosRepo.findByEstudiante(Number(estudiante.id));
+  }
+
+  return await cursosRepo.findNotEnrolledByEstudiante(Number(estudiante.id));
 }

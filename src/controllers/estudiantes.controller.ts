@@ -15,6 +15,17 @@ export async function getEstudianteById(req: Request, res: Response, next: NextF
   } catch (e) { next(e); }
 }
 
+export async function getCursosByEstudiante(req: Request, res: Response, next: NextFunction) {
+  try {
+    const estudianteId = req.params.id;
+    const enrolledParam = req.query.enrolled;
+    // interpretar enrolled: por defecto true, si ?enrolled=false => false
+    const enrolled = enrolledParam === undefined ? true : String(enrolledParam).toLowerCase() !== 'false';
+    const data = await service.getCursos(estudianteId, enrolled);
+    res.json({ ok: true, data });
+  } catch (e) { next(e); }
+}
+
 export async function createEstudiante(req: Request, res: Response, next: NextFunction) {
   try {
     const id = await service.create(req.body);

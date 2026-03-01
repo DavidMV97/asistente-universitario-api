@@ -63,3 +63,27 @@ export const remove = async (id: number): Promise<number> => {
     return (result as QueryResult).affectedRows;
 }
 
+export const findByEstudiante = async (estudianteId: number): Promise<Curso[]> => {
+    const [rows] = await pool.query(`
+        SELECT c.*, m.nombre as nombreMateria
+        FROM cursos c
+        JOIN inscripciones i ON c.id = i.curso_id
+        LEFT JOIN materias m ON c.materia_id = m.id
+        WHERE i.estudiante_id = ?
+        ORDER BY c.id DESC
+    `, [estudianteId]);
+    return rows as Curso[];
+}
+
+export const findNotEnrolledByEstudiante = async (estudianteId: number): Promise<Curso[]> => {
+    const [rows] = await pool.query(`
+        SELECT c.*, m.nombre as nombreMateria
+        FROM cursos c
+        LEFT JOIN materias m ON c.materia_id = m.id
+        LEFT JOIN inscripciones i ON c.id = i.curso_id AND i.estudiante_id = ?
+        WHERE i.id IS NULL
+        ORDER BY c.id DESC
+    `, [estudianteId]);
+    return rows as Curso[];
+}
+
