@@ -9,6 +9,7 @@ export interface Curso {
   periodo: number;
   cupos: number;
   nombreMateria?: string;
+  inscripcion_id?: number;
 }
 
 export interface CreateCurso extends Omit<Curso, 'id'> {}

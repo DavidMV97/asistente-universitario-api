@@ -65,7 +65,7 @@ export const remove = async (id: number): Promise<number> => {
 
 export const findByEstudiante = async (estudianteId: number): Promise<Curso[]> => {
     const [rows] = await pool.query(`
-        SELECT c.*, m.nombre as nombreMateria
+        SELECT c.*, m.nombre as nombreMateria, i.id as inscripcion_id
         FROM cursos c
         JOIN inscripciones i ON c.id = i.curso_id
         LEFT JOIN materias m ON c.materia_id = m.id
