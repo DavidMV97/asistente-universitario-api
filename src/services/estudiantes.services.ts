@@ -69,3 +69,8 @@ export async function getCursos(estudianteId: any, enrolled = true) {
 
   return await cursosRepo.findNotEnrolledByEstudiante(Number(estudiante.id));
 }
+
+export async function getNotasPorCurso(estudianteId: any) {
+  const estudiante = await getById(estudianteId);
+  return await repo.getNotasPorCurso(estudianteId); 
+}

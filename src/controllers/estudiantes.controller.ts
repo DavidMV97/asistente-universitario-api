@@ -55,3 +55,11 @@ export async function softDeleteEstudiante(req: Request, res: Response, next: Ne
     res.json({ ok: true, message: 'Estudiante eliminado' })
   } catch (e) { next(e); }
 }
+
+export async function getNotasPorCurso(req: Request, res: Response, next: NextFunction) {
+  try {
+    const data = await service.getNotasPorCurso(req.params.id) 
+    res.json({ ok: true, data })
+  } catch (e) { next(e); }
+}
+

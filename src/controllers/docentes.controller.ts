@@ -37,3 +37,10 @@ export async function deleteDocente(req: Request, res: Response, next: NextFunct
     res.json({ ok: true, message: 'Docente eliminado' });
   } catch (e) { next(e); }
 }
+
+export async function docenteCursos(req: Request, res: Response, next: NextFunction) {
+  try {
+    const data = await service.docenteCursos();
+    res.json({ ok: true, data });
+  } catch (e) { next(e); }
+}

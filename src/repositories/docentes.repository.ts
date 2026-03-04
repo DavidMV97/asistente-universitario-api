@@ -47,6 +47,29 @@ export const update = async (id: number, data: UpdateDocente): Promise<number> =
     return (result as QueryResult).affectedRows;
 }
 
+export const docenteCursos = async (): Promise<number> => {
+    const sql = `
+        SELECT 
+            d.id,
+            d.nombres,
+            JSON_ARRAYAGG(
+                JSON_OBJECT(
+                    'id', c.id,
+                    'materia', m.nombre
+                )
+            ) AS cursos
+        FROM docentes d
+        LEFT JOIN cursos c 
+            ON c.docente_id = d.id
+        LEFT JOIN materias m 
+            ON m.id = c.materia_id
+        GROUP BY d.id, d.nombres
+    `;
+    
+    const [rows] = await pool.query(sql);
+    return rows as any;
+}
+
 export const remove = async (id: number): Promise<number> => {
     const [result] = await pool.query('DELETE FROM docentes WHERE id= ?', [id]);
     return (result as QueryResult).affectedRows;

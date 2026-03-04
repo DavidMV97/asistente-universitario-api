@@ -1,4 +1,5 @@
 import { pool } from "../db/mysql.ts";
+import type { Curso } from "../models/Curso.ts";
 import type { Estudiante, CreateEstudiante, UpdateEstudiante } from "../models/Estudiante.ts";
 import type { QueryResult } from "../models/Query.ts";
 
@@ -37,8 +38,8 @@ export const update = async (id: number, data: UpdateEstudiante): Promise<number
     `;
     const params = [
         data.codigo,
-        data.nombres, 
-        data.apellidos, 
+        data.nombres,
+        data.apellidos,
         data.email,
         data.telefono || null,
         data.fecha_nacimiento || null,
@@ -54,8 +55,8 @@ export const remove = async (id: number): Promise<number> => {
     return (result as QueryResult).affectedRows;
 }
 
-export const softRemove = async(id:number): Promise<number> => {
-        const sql = `
+export const softRemove = async (id: number): Promise<number> => {
+    const sql = `
         UPDATE estudiantes
         SET deleted_at = NOW()
         WHERE id = ? AND deleted_at IS NULL
@@ -66,5 +67,29 @@ export const softRemove = async(id:number): Promise<number> => {
 
     const [result] = await pool.query(sql, params);
     return (result as QueryResult).affectedRows;
+}
+
+export const getNotasPorCurso = async (estudianteId: number): Promise<Curso[]> => {
+    const [rows] = await pool.query(`
+        SELECT 
+        c.id AS cursoId,
+        m.nombre AS nombreMateria,
+        m.codigo,
+        JSON_ARRAYAGG(
+            JSON_OBJECT(
+            'valor', n.valor,
+            'tipo', n.tipo
+            )
+        ) AS notas,
+        ROUND(AVG(n.valor), 1) AS promedio
+        FROM cursos c
+        JOIN inscripciones i ON c.id = i.curso_id
+        LEFT JOIN notas n ON i.id = n.inscripcion_id 
+        LEFT JOIN materias m ON c.materia_id = m.id
+        WHERE i.estudiante_id = ?
+        GROUP BY c.id, m.nombre
+        ORDER BY c.id DESC
+    `, [estudianteId]);
+    return rows as Curso[];
 }
 

@@ -45,3 +45,7 @@ export async function remove(id: any): Promise<number> {
   const affected = await repo.remove(Number(id));
   return affected;
 }
+
+export async function docenteCursos() {
+  return await repo.docenteCursos();
+}
